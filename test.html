@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CA Canvas Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            overflow: hidden;
+        }
+
+        .canvas-wrapper {
+            float: left;
+            width: 50%;
+            aspect-ratio: 1 / 1;
+        }
+
+        .canvas-wrapper canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .text-panel {
+            float: left;
+            width: 50%;
+            padding-left: 20px;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div class="container clearfix">
+        <div class="canvas-wrapper">
+            <canvas id="myCanvas"></canvas>
+        </div>
+        <div class="text-panel">
+            <h3>CA Grid</h3>
+            <p>Rows: <span id="rowsDisplay">0</span></p>
+            <p>Cols: <span id="colsDisplay">0</span></p>
+            <p>Cell Size: <span id="cellSizeDisplay">0</span>px</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import CACanvas from './CACanvas.js';
+
+        const canvas = document.getElementById('myCanvas');
+        const ca = new CACanvas(canvas);
+        const rows = 30;
+        const cols = 30;
+        ca.setGrid(rows, cols);
+
+        function drawGrid() {
+
+
+            // Set the grid - this handles cell size calculation and canvas adjustment
+
+            // Draw circles
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const isEven = (x + y) % 2 === 0;
+                    const color = isEven ? "#333333" : "#660000";
+                    ca.drawCircleAt(x, y, color, true);
+                }
+            }
+
+            // Update display
+            document.getElementById('rowsDisplay').textContent = rows;
+            document.getElementById('colsDisplay').textContent = cols;
+            document.getElementById('cellSizeDisplay').textContent = ca.cellSize;
+        }
+
+        drawGrid();
+
+        window.addEventListener('resize', () => {
+            ca.resizeAndReset();
+            drawGrid();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            ca.destroy();
+        });
+    </script>
+</body>
+</html>
