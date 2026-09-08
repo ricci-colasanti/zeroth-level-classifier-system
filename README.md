@@ -1,5 +1,3 @@
----
-
 ## Course Overview: Building a Bucket Brigade Classifier System
 
 We'll build this in **8 progressive stages**:
